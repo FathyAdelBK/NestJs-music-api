@@ -14,6 +14,7 @@ import { SingerAlbumModule } from './singer-album/singer-album.module';
 import { NotificationModule } from './notification/notification.module';
 import { SongModule } from './song/song.module';
 import { ConfigModule } from '@nestjs/config';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ConfigModule } from '@nestjs/config';
     SingerAlbumModule,
     NotificationModule,
     SongModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],
