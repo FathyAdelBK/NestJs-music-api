@@ -1,4 +1,4 @@
-import { Gender, MusicianType } from '@prisma/client';
+import { Gender, MusicianAlbum, MusicianType } from '@prisma/client';
 
 export class MusicianResponseDto {
   name: string;
@@ -9,4 +9,6 @@ export class MusicianResponseDto {
   nationality: string;
   createdAt: Date;
   updatedAt: Date;
+  userId: number;
+  photoName: string;
 }

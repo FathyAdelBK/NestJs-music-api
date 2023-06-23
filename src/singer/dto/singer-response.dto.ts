@@ -9,4 +9,5 @@ export class SingerResponseDto {
   nationality: string;
   createdAt: Date;
   updatedAt: Date;
+  photoName: string;
 }

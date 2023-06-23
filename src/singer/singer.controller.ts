@@ -10,6 +10,8 @@ import {
   UseGuards,
   Delete,
   HttpCode,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { SingerService } from './singer.service';
 import { AtGuard } from 'src/auth/guard/at.guard';
@@ -19,6 +21,8 @@ import { CreateSingerDto } from './dto/create-singer.dto';
 import { UpdateSingerDto } from './dto/update-singer.dto';
 import { CreateSingerAlbumDto } from 'src/singer-album/dto/create-singer-album.dto';
 import { SingerAlbumResponseDto } from 'src/singer-album/dto/singer-album-response.dto';
+import { DecodedUserType, User } from 'src/auth/decorator/user.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('singers')
 export class SingerController {
@@ -47,20 +51,25 @@ export class SingerController {
   }
 
   @UseGuards(AtGuard)
+  @UseInterceptors(FileInterceptor('photo'))
   @Post()
   async create(
     @Body() singerData: CreateSingerDto,
+    @UploadedFile() photo: Express.Multer.File,
+    @User() user: DecodedUserType,
   ): Promise<SingerResponseDto> {
-    return await this.singerService.create(singerData);
+    return await this.singerService.create(singerData, photo, user);
   }
 
   @UseGuards(AtGuard)
+  @UseInterceptors(FileInterceptor('photo'))
   @Put(':singerId')
   async update(
     @Param('singerId', ParseIntPipe) singerId: number,
+    @UploadedFile() photo: Express.Multer.File,
     @Body() singerData: UpdateSingerDto,
   ): Promise<SingerResponseDto> {
-    return await this.singerService.update(singerId, singerData);
+    return await this.singerService.update(singerId, photo, singerData);
   }
 
   @UseGuards(AtGuard)
@@ -73,11 +82,19 @@ export class SingerController {
   }
 
   @UseGuards(AtGuard)
+  @UseInterceptors(FileInterceptor('image'))
   @Post(':singerId/new-album')
   async newAlbum(
     @Param('singerId', ParseIntPipe) singerId: number,
     @Body() newAlbumData: CreateSingerAlbumDto,
+    @UploadedFile() image: Express.Multer.File,
+    @User() user: DecodedUserType,
   ): Promise<SingerAlbumResponseDto> {
-    return await this.singerService.newAlbum(singerId, newAlbumData);
+    return await this.singerService.newAlbum(
+      singerId,
+      newAlbumData,
+      image,
+      user,
+    );
   }
 }

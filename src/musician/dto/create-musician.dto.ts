@@ -1,5 +1,5 @@
 import { Gender, MusicianType } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateMusicianDto {
   @IsNotEmpty()
@@ -9,10 +9,6 @@ export class CreateMusicianDto {
   @IsNotEmpty()
   @IsString()
   info: string;
-
-  @IsNotEmpty()
-  @IsString()
-  photo: string;
 
   @IsNotEmpty()
   @IsEnum(MusicianType)

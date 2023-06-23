@@ -8,18 +8,26 @@ datasource db {
 }
 
 model User {
-  id           Int        @id @default(autoincrement())
-  name         String
-  email        String     @unique
-  password     String
-  role         Role       @default(USER)
-  facebookId   String?
-  gmailId      String?
-  refreshToken String?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  profile      Profile?
-  playlists    Playlist[]
+  id             Int             @id @default(autoincrement())
+  name           String
+  email          String          @unique
+  password       String
+  role           Role            @default(USER)
+  facebookId     String?
+  gmailId        String?
+  refreshToken   String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  profile        Profile?
+  playlists      Playlist[]
+  singers        Singer[]
+  musicians      Musician[]
+  musicianAlbums MusicianAlbum[]
+  singerAlbums   SingerAlbum[]
+  songs          Song[]
+  musics         Music[]
+  favourites     Favourite[]
+  tracks         Track[]
 }
 
 model Profile {
@@ -44,48 +52,60 @@ model Singer {
   id           Int           @id @default(autoincrement())
   name         String
   info         String
-  photo        String
+  photo        String?
+  photoName    String?
   type         SingerType
   gender       Gender
   nationality  String
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   singerAlbums SingerAlbum[]
+  User         User?         @relation(fields: [userId], references: [id])
+  userId       Int?
 }
 
 model Musician {
   id             Int             @id @default(autoincrement())
   name           String
   info           String
-  photo          String
+  photo          String?
+  photoName      String?
   type           MusicianType
   gender         Gender
   nationality    String
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   musicianAlbums MusicianAlbum[]
+  User           User?           @relation(fields: [userId], references: [id])
+  userId         Int?
 }
 
 model MusicianAlbum {
   id         Int       @id @default(autoincrement())
   name       String
   image      String
+  imageName  String?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   Musician   Musician? @relation(fields: [musicianId], references: [id], onDelete: Cascade)
   musicianId Int?
   musics     Music[]
+  User       User?     @relation(fields: [userId], references: [id])
+  userId     Int?
 }
 
 model SingerAlbum {
   id        Int      @id @default(autoincrement())
   name      String
   image     String
+  imageName String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Singer    Singer?  @relation(fields: [singerId], references: [id], onDelete: Cascade)
   singerId  Int?
   songs     Song[]
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
 }
 
 model Song {
@@ -105,6 +125,8 @@ model Song {
   tracks        Track[]
   playlists     SongPlaylists[]
   favourites    SongFavourites[]
+  User          User?            @relation(fields: [userId], references: [id])
+  userId        Int?
 }
 
 model Music {
@@ -124,6 +146,8 @@ model Music {
   tracks          Track[]
   playlists       MusicPlaylists[]
   favourites      MusicFavourites[]
+  User            User?             @relation(fields: [userId], references: [id])
+  userId          Int?
 }
 
 model Favourite {
@@ -134,6 +158,8 @@ model Favourite {
   tracks    Track[]
   musics    MusicFavourites[]
   songs     SongFavourites[]
+  User      User?             @relation(fields: [userId], references: [id])
+  userId    Int?
 }
 
 model Playlist {
@@ -163,6 +189,8 @@ model Track {
   favouriteId Int?
   Playlist    Playlist?  @relation(fields: [playlistId], references: [id], onDelete: Cascade)
   playlistId  Int?
+  User        User?      @relation(fields: [userId], references: [id])
+  userId      Int?
 }
 
 model MusicPlaylists {
